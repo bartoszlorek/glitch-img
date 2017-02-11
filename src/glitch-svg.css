@@ -1,0 +1,35 @@
+.glitch-svg-clip {
+    position: absolute;
+    width: 0;
+    height: 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+.glitch { position:relative; overflow:hidden }
+.glitch:before { content:""; display:block; height:0; padding-top:66.64%; padding-top:calc(1666% / 2500 * 100) }
+.glitch-svg, .glitch-img, .glitch-img-blend, .glitch-lines { position:absolute; top:0; left:0; width:100%; height:100% }
+.glitch-svg { -webkit-transform:translate(-1.5%, 0); -ms-transform:translate(-1.5%, 0); transform:translate(-1.5%, 0) }
+.glitch-img { z-index:-2; -webkit-filter:saturate(1.5); -moz-filter:saturate(1.5); -o-filter:saturate(1.5); -ms-filter:saturate(1.5); filter:saturate(1.5); }
+.glitch-img-blend { z-index:-1; opacity:.8; mix-blend-mode:luminosity; -webkit-transform:translate(1%, 0); -ms-transform:translate(1%, 0); transform:translate(1%, 0) }
+.glitch-lines { z-index:1; opacity:.2; mix-blend-mode:difference }
+
+.glitch:hover .glitch-svg { animation:glitching 1s step-start forwards infinite }
+
+
+@keyframes glitching {
+    0% { transform:translate(-1.5%, 0) }
+    33% { transform:translate(2%, 0) }
+    66% { transform:translate(-1%, 0) }
+    to { transform:translate(0, 0) }
+}
+
+.glitch { width:100% }
