@@ -2,6 +2,8 @@
 
 Glitch Image with random generated SVG clipPath and CSS Animation. By default hover on element plays css animation, but this effect can be override by another style.
 
+[demo](http://bartoszlorek.pl/run/glitch-img/)
+
 ## Usage
 Single instance of `GlitchImg` can handle multiple images, but it's important to remember that density of clipPath is as big as biggest image's width and height. Small images sharing one instance with big can suffer from to oversized clippings paths. To achieve multiple images with different clipping pattern (generated randomly) use multiple instances.
 
