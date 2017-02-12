@@ -11,6 +11,8 @@
 }
 .glitch-img-src {
     display: block;
+    width: 100%;
+    height: auto;
 }
 .glitch-img-svg,
 .glitch-img-mask {
@@ -29,8 +31,8 @@
     animation: glitch-img-animation 1s step-start forwards infinite
 }
 @keyframes glitch-img-animation {
-    0% { transform: translate(-2%, 0) }
+    0% { transform: translate(-4%, 0) }
     10% { transform: translate(2%, 0) }
-    20% { transform: translate(-1%, 0) }
+    20% { transform: translate(-2%, 0) }
     to { transform: translate(0, 0) }
 }

@@ -64,25 +64,64 @@ define( [], function () {
     }
 
     function removeChildren(parent) {
+        if (!( parent && parent.nodeType))
+            return false;
         while (parent.firstChild) {
             parent.removeChild(parent.firstChild);
         }
     }
 
+    function createClip(clipId) {
+        var clips = document.getElementById('glitch-img-clips'),
+            clipPath,
+            defs;
+
+        if (clips === null) {
+            clips = createElement('svg', {
+                xmlns: 'ns:svg',
+                id: 'glitch-img-clips'
+            }, 'ns:svg');
+
+            defs = createElement('defs', null, 'ns:svg');
+            clips.appendChild(defs);
+            document.body.appendChild(clips);
+
+        } else {
+            defs = clips.childNodes[0];
+        }
+        for (var i=0, currentClip; i<defs.childNodes.length; i++) {
+            currentClip = defs.childNodes[i];
+            if (parseInt(currentClip.id.split('-').pop()) === clipId)
+                return currentClip;
+        }
+        clipPath = createElement('clipPath', {
+            id: 'glitch-img-clip-' + clipId
+        }, 'ns:svg');
+        defs.appendChild(clipPath);
+        return clipPath;
+    }
+
     function wrapImage(img, clipId, classes) {
         var wrap, svg, imgSvg;
-        
+
+        if (img.className.indexOf('glitch-img-src') !== -1) {
+            imgSvg = img.nextSibling.childNodes[0];
+            imgSvg.setAttribute('clip-path',
+                'url(#glitch-img-clip-'+ clipId +')');
+            return imgSvg;
+        }
+
         classes = classes && ' ' + classes || '';
         wrap = createElement('div', {
             'class': 'glitch-img-wrap' + classes
         });
-
+        
         svg = createElement('svg', {
             'class': 'glitch-img-svg',
             'preserveAspectRatio': [null, 'none'],
             'xmlns:xlink': ['ns:xmlns', 'ns:xlink']
         }, 'ns:svg');
-
+        
         imgSvg = createElement('image', {
             'xlink:href': ['ns:xlink', img.src],
             'clip-path': 'url(#glitch-img-clip-'+ clipId +')',
@@ -90,58 +129,35 @@ define( [], function () {
             'height': [null, '100%']
         }, 'ns:svg');
 
-        img.parentNode.insertBefore(wrap, img);
-        img.className += ' glitch-img-src';
-
         svg.appendChild(imgSvg);
-        wrap.appendChild(img);
         wrap.appendChild(svg);
+
+        img.className += ' glitch-img-src';
+        img.parentNode.insertBefore(wrap, img);
+        wrap.insertBefore(img, svg);
         return imgSvg;
     }
 
     var lastId = 0;
     function GlitchImg(image) {
-        this.clipId = (lastId++);
+        this.clipId = lastId++;
         this.images = [];
         this.add(image);
         return this;
     }
 
     GlitchImg.prototype = {
-        refresh: function(img) {
-            var current,
-                image, i,
-                svg;
-
-            for (i=0; i<this.images.length; i++) {
-                if (this.images[i].img === img ||
-                   (typeof img === 'number' && img === i)) {
-                    current = [this.images[i]];
-                    break;
-                }
-            }
-            if (typeof current === 'undefined') {
-                current = this.images;
-            }
-            for (i=0; i<current.length; i++) {
-                svg = current[i].imgSvg.parentNode;
-                svg.setAttribute('viewBox', '0 0 '+
-                    current[i].width +' '+
-                    current[i].height
-                );
-            }
-            this.update();
-        },
-
         add: function(element) {
             var newImages = selector(element),
-                img, imgSvg;
+                lastIndex = this.images.length,
+                index, img, imgSvg;
 
             for (var i=0; i<newImages.length; i++) {
                 img = newImages[i];
                 imgSvg = wrapImage(img, this.clipId);
-                
-                this.images[i] = {
+                index = lastIndex + i;
+
+                this.images[index] = {
                     img: img,
                     imgSvg: imgSvg,
                     width: 0,
@@ -155,70 +171,91 @@ define( [], function () {
                         self.refresh(img);
                     };
                     temp.src = img.src;
-                })(this, i, img);
+                })(this, index, img);
             }
             return this;
         },
 
-        clip: function() {
-            var clips, defs;
+        remove: function() {
+            // don't change order or images items
+            // instead set null or something
+        },
 
+        clip: function() {
             if (typeof this.clipPath !== 'undefined') {
                 return this;
             }
-            if ((clips = document.getElementById('glitch-img-clips')) === null) {
-                clips = createElement('svg', {
-                    xmlns: 'ns:svg',
-                    id: 'glitch-img-clips'
-                }, 'ns:svg');
-
-                defs = createElement('defs', null, 'ns:svg');
-                document.body.appendChild(clips);
-                clips.appendChild(defs);
-                
-            } else {
-                defs = clips.children[0];
-            }
-            this.clipPath = createElement('clipPath', {
-                id: 'glitch-img-clip-' + this.clipId
-            }, 'ns:svg');
-            defs.appendChild(this.clipPath);
+            this.clipPath = createClip(this.clipId);
             this.update();
+            return this;
+        },
+
+        refresh: function(element) {
+            var toRefresh,
+                clipWidth = 100,
+                clipHeight = 100,
+                image;
+
+            for (i=0; i<this.images.length; i++) {
+                if (this.images[i].img === element ||
+                   (typeof element === 'number' && element === i)) {
+                    toRefresh = [this.images[i]];
+                    break;
+                }
+            }
+            if (typeof toRefresh === 'undefined') {
+                toRefresh = this.images;
+            }
+            for (var i=0; i<toRefresh.length; i++) {
+                toRefresh[i]
+                    .imgSvg
+                    .parentNode
+                    .setAttribute(
+                        'viewBox', '0 0 '+
+                        toRefresh[i].width +' '+
+                        toRefresh[i].height
+                    );
+            }
+            for (var i=0; i<this.images.length; i++) {
+                image = this.images[i];
+                clipWidth = Math.max(image.width, clipWidth);
+                clipHeight = Math.max(image.height, clipHeight); 
+            }
+            this.clipWidth = clipWidth;
+            this.clipHeight = clipHeight;
+            this.update();
+            return this;
         },
 
         update: function() {
             this.clip();
-            var imageWidth = 100,
-                imageHeight = 100,
+            var clipWidth = this.clipWidth || 100,
+                clipHeight = this.clipHeight || 100,
+                rectMaxHeight = clipHeight * .3,
                 rectOffset = 0,
                 rectHeight,
-                rectMaxHeight,
-                rect,
-                image;
+                rects;
 
             if (! this.images.length) {
                 return this;
             }
-            for (var i=0; i<this.images.length; i++) {
-                image = this.images[i];
-                imageWidth = Math.max(image.width, imageWidth);
-                imageHeight = Math.max(image.height, imageHeight); 
-            }
             removeChildren(this.clipPath);
-            rectMaxHeight = imageHeight * .3;
+            rects = document.createDocumentFragment();
 
-            while ( rectOffset <= imageHeight ) {
+            while ( rectOffset <= clipHeight ) {
                 rectHeight = Math.round(randomBiased(.01) * rectMaxHeight);
                 rectOffset += Math.round(randomBiased(.01) * rectMaxHeight) + rectHeight;
-                rect = createElement('rect', {
-                    x: [null, '0'],
-                    y: [null, rectOffset],
-                    height: [null, rectHeight],
-                    width: [null, imageWidth]
-                }, 'ns:svg');
-                this.clipPath.appendChild(rect);
+                rects.appendChild(
+                    createElement('rect', {
+                        x: [null, '0'],
+                        y: [null, rectOffset],
+                        height: [null, rectHeight],
+                        width: [null, clipWidth]
+                    }, 'ns:svg')
+                );
             }
-            console.log(this);
+            this.clipPath.appendChild(rects);
+            return this;
         }
     }
 
