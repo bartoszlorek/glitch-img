@@ -1,12 +1,13 @@
 
 require.config({
 	paths: {
-        glitchSVG: 'glitch-svg'
+        glitchImg: 'glitch-img'
     }
 });
 
-require( ['glitchSVG'], function(glitchSVG) {
+require( ['glitchImg'], function(glitchImg) {
 
-    var glitch = new glitchSVG().add('glitch');
+    var glitch1 = new glitchImg('#glitch1'),
+        glitch2 = new glitchImg('#glitch2');
 
 });
