@@ -6,25 +6,30 @@ require.config({
     }
 });
 
-require( ['glitchImg', 'aframe'], function(glitchImg, aframe) {
+require( ['glitchImg', 'aframe'], function(GlitchImg, aframe) {
 
-    var glitch1 = new glitchImg('#glitch1'),
-        glitch2 = new glitchImg('#glitch2');
+    var glitch1 = new GlitchImg('#glitch1'),
+        glitch2 = new GlitchImg('#glitch2');
 
     // animate glitching by regular update
     aframe.setInterval(function() {
         glitch1.update();
     }, 100);
 
-    // add another image after while
-    /*aframe.setTimeout(function() {
-        glitch1.add('#glitch2');
-        console.log( glitch1 );
-    }, 2000);*/
 
-    // add image from second to first glitch
+    /*var glitch = new GlitchImg();
+
+    // add images after while
     aframe.setTimeout(function() {
-        glitch1.add('#glitch2');
+        glitch
+            .add('#glitch1')
+            .add('#glitch2');
+        console.log(glitch);
     }, 2000);
+
+    aframe.setInterval(function() {
+        glitch.update();
+    }, 100);*/
+
 
 });

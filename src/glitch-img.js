@@ -115,7 +115,7 @@ define( [], function () {
         wrap = createElement('div', {
             'class': 'glitch-img-wrap' + classes
         });
-        
+
         svg = createElement('svg', {
             'class': 'glitch-img-svg',
             'preserveAspectRatio': [null, 'none'],
@@ -177,16 +177,15 @@ define( [], function () {
         },
 
         remove: function() {
-            // don't change order or images items
+            // don't change indexes of image array
             // instead set null or something
         },
 
         clip: function() {
-            if (typeof this.clipPath !== 'undefined') {
-                return this;
+            if (typeof this.clipPath === 'undefined') {
+                this.clipPath = createClip(this.clipId);
+                this.update();
             }
-            this.clipPath = createClip(this.clipId);
-            this.update();
             return this;
         },
 
@@ -228,7 +227,6 @@ define( [], function () {
         },
 
         update: function() {
-            this.clip();
             var clipWidth = this.clipWidth || 100,
                 clipHeight = this.clipHeight || 100,
                 rectMaxHeight = clipHeight * .3,
@@ -239,6 +237,8 @@ define( [], function () {
             if (! this.images.length) {
                 return this;
             }
+            
+            this.clip();
             removeChildren(this.clipPath);
             rects = document.createDocumentFragment();
 
