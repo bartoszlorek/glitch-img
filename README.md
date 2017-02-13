@@ -5,7 +5,7 @@ Glitch Image with random generated SVG clipPath and CSS Animation. By default ho
 [demo](http://bartoszlorek.pl/run/glitch-img/)
 
 ## Usage
-Single instance of `GlitchImg` can handle multiple images, but it's important to remember that density of clipPath is as big as biggest image's width and height. Small images sharing one instance with big can suffer from to oversized clippings paths. To achieve multiple images with different clipping pattern (generated randomly) use multiple instances.
+Single instance of `GlitchImg` can handle multiple images, but it's important to remember that density of clipPath is as big as biggest images' dimensions. Small images sharing one instance with big ones can suffer from oversized clippings paths. To achieve multiple images with different clipping pattern (generated randomly) use multiple instances.
 
 Images passing as `selector` are added after initialize, but aren't required. It can be `id`, `class` or event html elements.
 
