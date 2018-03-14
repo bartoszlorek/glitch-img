@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ubery/glitch-svg.git"
+    "url": "git+https://github.com/bartoszlorek/glitch-svg.git"
   },
   "author": "Bartosz Lorek",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ubery/glitch-svg/issues"
+    "url": "https://github.com/bartoszlorek/glitch-svg/issues"
   },
-  "homepage": "https://github.com/ubery/glitch-svg#readme",
+  "homepage": "https://github.com/bartoszlorek/glitch-svg#readme",
   "dependencies": {
     "requirejs": "^2.3.2"
   }
