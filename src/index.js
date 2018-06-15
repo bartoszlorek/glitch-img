@@ -1,35 +1,44 @@
+import parseNode from './.utils/parse-node'
+import loadImage from './.utils/load-image'
+import BaseImage from './.internal/base-image'
+import createDefs from './.internal/create-defs'
 
-require.config({
-	paths: {
-        glitchImg: 'glitch-img',
-        aframe: 'http://cdn.rawgit.com/ubery/aframe/master/src/aframe'
+const defs = createDefs({
+    wrapper: 'gi-wrapper',
+    image: 'gi-image',
+    clone: 'gi-clone'
+})
+
+function createGlitchImg(element) {
+    let images = []
+
+    parseNode(element).forEach(elem => {
+        loadImage(elem, () => images.push(
+            new BaseImage(elem, defs)
+        ))
+    })
+
+    const self = {
+        destroy: () => {
+            images.forEach(image => image.destroy())
+            images = null
+            return null
+        },
+
+        update: () => {
+            if (images != null) {
+                let index = -1
+                const length = images.length
+                while (++index < length) {
+                    images[index].update()
+                }
+            }
+            return self
+        }
     }
-});
 
-require( ['glitchImg', 'aframe'], function(GlitchImg, aframe) {
+    return self
+}
 
-    var glitch1 = new GlitchImg('#glitch1'),
-        glitch2 = new GlitchImg('#glitch2');
-
-    // animate glitching by regular update
-    aframe.setInterval(function() {
-        glitch1.update();
-    }, 100);
-
-
-    /*var glitch = new GlitchImg();
-
-    // add images after while
-    aframe.setTimeout(function() {
-        glitch
-            .add('#glitch1')
-            .add('#glitch2');
-        console.log(glitch);
-    }, 2000);
-
-    aframe.setInterval(function() {
-        glitch.update();
-    }, 100);*/
-
-
-});
+createGlitchImg.options = defs.options
+export default createGlitchImg

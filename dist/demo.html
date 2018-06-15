@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" type="text/css" href="./demo.css">
+    <title>glitch-img</title>
+</head>
+<body>
+    <img id="grumpy" src="http://www.bartoszlorek.pl/run/glitch-img/img/grumpy.jpg" />
+    <img id="shiro" src="http://www.bartoszlorek.pl/run/glitch-img/img/shiro.jpg" />
+    <script src="./glitch-img.umd.js"></script>
+    <script type="text/javascript">
+        ;(function() {
+            glitchImg.options({
+                wrapper: 'container',
+                clone: 'container__clone'
+            })
+            var images = glitchImg(document.querySelectorAll('img'))
+
+            setInterval(function() {
+                images.update()
+            }, 100)
+            // setTimeout(function() {
+            //     images.destroy()
+            // }, 5000)
+        })()
+    </script>
+</body>
+</html>

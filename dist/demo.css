@@ -1,0 +1,10 @@
+.container:hover .container__clone {
+    animation: glitch 1s step-start forwards infinite
+}
+
+@keyframes glitch {
+    0% { transform: translate(-4%, 0) }
+    10% { transform: translate(2%, 0) }
+    20% { transform: translate(-2%, 0) }
+    to { transform: translate(0, 0) }
+}
