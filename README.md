@@ -5,7 +5,7 @@ Glitch image with random generated SVG clipping paths.
 
 ## Initialization
 ```javascript
-glitchImg(nodes)
+glitchImg(image)  // one element or an array of them
 ```
 
 ## Methods
