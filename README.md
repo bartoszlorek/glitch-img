@@ -1,72 +1,34 @@
-# Glitch Image
+# glitch-img
 
-Glitch Image with random generated SVG clipPath and CSS Animation. By default hover on element plays css animation, but this effect can be override by another style.
+Glitch image with random generated SVG clipping slices.
 
 [demo](http://bartoszlorek.pl/run/glitch-img/)
 
-## Usage
-Single instance of `GlitchImg` can handle multiple images, but it's important to remember that density of clipPath is as big as biggest images' dimensions. Small images sharing one instance with big ones can suffer from oversized clippings paths. To achieve multiple images with different clipping pattern (generated randomly) use multiple instances.
-
-Images passing as `selector` are added after initialize, but aren't required. It can be `id`, `class` or event html elements.
-
-```
-new GlitchImg( [selector] )
+## Initialization
+```javascript
+glitchImg(nodes)
 ```
 
-Basic method to add more images, accepts similar parameters like `selector` above.
-
-```
-.add( [selector] )
-```
-
-Randomly regenerate clipping paths. Call inside `interval` function to animate glitch effect.
-
-```
+## Methods
+### update
+```javascript
 .update()
 ```
+Regenerate clipping slices of `glitch-img` instance.
 
-Basically refresh images and assign their dimensions to other elements. Passing `img` element or index of `.images` can refresh only specific image, but leaving undefined works on all.
-
+### destroy
+```javascript
+.destroy()
 ```
-.refresh( [image] )
-```
+Remove all created elements and classes of `glitch-img` instance and destroy it.
 
 ## Examples
-
-Simple convert images to static glitched images.
-
+Convert all images to static glitch images...
 ```javascript
-// multiple images with different clipPaths
-var glitch1 = new GlitchImg('#glitch1'),
-    glitch2 = new GlitchImg('#glitch2'),
-    glitch2 = new GlitchImg('#glitch3');
-    
-// multiple images with same clipPath
-var glitches = new GlitchImg('.glitch');
+let glitch = glitchImg(document.querySelectorAll('img'))
 ```
 
-Add images after while.
-
+then regenerate all clipping paths every 100 ms to achieve animation effect.
 ```javascript
-var glitches = new GlitchImg();
-
-// could be instance's parameter
-glitches.add('#glitch1');
-
-// 2 seconds and we have the rest
-setTimeout(function() {
-    glitch
-        .add('#glitch2')
-        .add('#glitch3');
-}, 2000);
-```
-
-Generate clipping paths every 100 ms to achieve effect of animation.
-
-```javascript
-var glitch = new GlitchImg('#glitch1');
-
-setInterval(function() {
-    glitch.update();
-}, 100);
+setInterval(() => glitch.update(), 100)
 ```
