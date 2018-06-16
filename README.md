@@ -1,6 +1,5 @@
 # glitch-img
-
-Glitch image with random generated SVG clipping slices.
+Glitch image with random generated SVG clipping paths.
 
 [demo](http://bartoszlorek.pl/run/glitch-img/)
 
@@ -10,25 +9,16 @@ glitchImg(nodes)
 ```
 
 ## Methods
-### update
 ```javascript
-.update()
+.update()   // regenerate clipping paths of given instance
+.destroy()  // destroy instance by removing created elements and classes
 ```
-Regenerate clipping slices of `glitch-img` instance.
 
-### destroy
+## Example
 ```javascript
-.destroy()
-```
-Remove all created elements and classes of `glitch-img` instance and destroy it.
-
-## Examples
-Convert all images to static glitch images...
-```javascript
+// convert all images to static glitch images
 let glitch = glitchImg(document.querySelectorAll('img'))
-```
 
-then regenerate all clipping paths every 100 ms to achieve animation effect.
-```javascript
+// regenerate all clips every 100 ms to achieve animation effect
 setInterval(() => glitch.update(), 100)
 ```
