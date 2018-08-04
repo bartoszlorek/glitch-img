@@ -30,7 +30,6 @@
     "rollup-plugin-uglify": "^3.0.0"
   },
   "dependencies": {
-    "blueimp-md5": "^2.10.0",
     "object-assign": "^4.1.1"
   }
 }
